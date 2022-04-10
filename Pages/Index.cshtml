@@ -4,7 +4,38 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="mt-5">
+    
+        <p>Found: @Model.errorCMessage ...    
+
+
+        <p>Found: @Model.errorRMessage ...    
+            
+
+            @foreach (var item in Model.Reports)
+            {
+                <p> This is @item.Title </p>
+                <p> This is @item.Id </p>
+                <p> This is @item.CreatedBy </p>
+                <p> This is @item.CreatedDate </p>
+                <p> This is @item.PublishedDate </p>
+            }
+
+            <hr />
+
+            @foreach (var item in Model.Comments)
+            {
+                <p> This is @item.CommentText </p>
+                <p> This is @item.CreatedBy </p>
+                <p> This is @item.CreatedDate </p>
+                <p> This is @item.Id </p>
+            }
+
+            <hr />
+
+            <a asp-page="/Reports/New" class="w-20 vtn btn-primary m-2"> + Add New Report</a>
+            
+        
+        </p>
+
 </div>
