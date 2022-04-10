@@ -1,5 +1,9 @@
 ﻿@page
 @model RapidNewsReportWebApp.Pages.Reports.NewModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
 @{
 }
 
@@ -16,6 +20,23 @@ Add New Report
             <label asp-for="newReport.Content" class="col-form-label">Content</label>
             <input asp-for="newReport.Content" class-"form-cotrol" />
         </div>
+
+        <div class="form-group">
+            <select asp-for="newReport.Category" asp-items="Html.GetEnumSelectList<NewModel.CategoryType>()">
+                <option selected="selected" value="">Please select</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <input type="hidden" asp-for="newReport.CreatedBy" class-"form-cotrol" value="@UserManager.GetUserId(User)"/>
+        </div>
+
+
+        <div class="form-group">
+            <input asp-for="newReport.IsPublished" />
+        </div>
+
+
 
         <button class="wt-20 col-12 btn btn-primary btn-lg">Submit</button>
     </form>

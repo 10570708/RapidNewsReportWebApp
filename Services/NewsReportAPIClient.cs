@@ -22,6 +22,13 @@ namespace RapidNewsReportWebApp.Services
             return await Client.GetFromJsonAsync<IEnumerable<Report>>("api/Reports/1");
         }
 
+        public async Task<Report> GetReport(int ID)
+        {
+            string myPath = $"api/Reports/{ID}";
+            return await Client.GetFromJsonAsync<Report>(myPath);
+        }
+
+
         public async Task<bool> PostReport(PReport myReport)
         {
             var response = await Client.PostAsJsonAsync<PReport>("api/Reports", myReport);

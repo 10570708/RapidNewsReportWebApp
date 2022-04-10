@@ -19,6 +19,8 @@
                 <p> This is @item.CreatedBy </p>
                 <p> This is @item.CreatedDate </p>
                 <p> This is @item.PublishedDate </p>
+
+                <a asp-page="/Reports/Edit" asp-route-id="@item.Id" class="w-20 vtn btn-primary m-2"> + Edit Report</a>
             }
 
             <hr />
