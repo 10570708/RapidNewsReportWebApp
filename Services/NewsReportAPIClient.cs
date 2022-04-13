@@ -29,9 +29,17 @@ namespace RapidNewsReportWebApp.Services
         }
 
 
-        public async Task<bool> PostReport(PReport myReport)
+        public async Task<bool> PostReport(Report myReport)
         {
-            var response = await Client.PostAsJsonAsync<PReport>("api/Reports", myReport);
+            var response = await Client.PostAsJsonAsync<Report>("api/Reports", myReport);
+            return response.IsSuccessStatusCode;
+        }
+
+
+        public async Task<bool> PutReport(Report myReport)
+        {
+            string myPath = $"api/Reports/{myReport.Id}";
+            var response = await Client.PutAsJsonAsync<Report>(myPath, myReport);
             return response.IsSuccessStatusCode;
         }
 

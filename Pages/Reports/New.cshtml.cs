@@ -37,7 +37,7 @@ namespace RapidNewsReportWebApp.Pages.Reports
         }
 
         [BindProperty]
-        public PReport newReport { get; set; }
+        public Report newReport { get; set; }
         public enum CategoryType
         {
             [Display(Name = "Local News")]

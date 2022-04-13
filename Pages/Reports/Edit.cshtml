@@ -11,3 +11,30 @@ Edit Report
 <p>@Model.myReport.CreatedBy</p>
 <p>@Model.myReport.Title</p>
 <p>@Model.myReport.Content</p>
+
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="myReport.Title" class="col-form-label">Title</label>
+            <input asp-for="myReport.Title" class-"form-cotrol" value="@Model.myReport.Title"/>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="myReport.Content" class="col-form-label">Content</label>
+            <input asp-for="myReport.Content" class-"form-cotrol" value="@Model.myReport.Content"/>
+        </div>
+
+        <div class="form-group">
+            <select asp-for="myReport.Category" asp-items="Html.GetEnumSelectList<EditModel.CategoryType>()">
+                <option>Please select</option>
+            </select>
+        </div>
+
+
+        <div class="form-group">
+            <input asp-for="myReport.IsPublished" />
+        </div>
+
+
+
+        <button class="wt-20 col-12 btn btn-primary btn-lg">Submit</button>
+    </form>

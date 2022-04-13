@@ -30,10 +30,44 @@ namespace RapidNewsReportWebApp.Pages.Reports
 
         }
 
+        public async Task<IActionResult> OnPost()
+        {
+            bool success = await _newsReportApiClient.PutReport(myReport);
+
+            if (!success)
+            {
+                return Page();
+            }
+            else
+            {
+                return RedirectToPage("../Index");
+            }
+
+        }
+
         public int reportId { get; set; }
         
+        //public Report myReport { get; set; }
+
+        [BindProperty]
         public Report myReport { get; set; }
+        public enum CategoryType
+        {
+            LocalNews = 0,
+            WorldNews = 1,
+            Sport = 2,
+            Entertainment = 3,
+            Weather = 4,
+            Politics = 5,
+            Opinion = 6,
+            FoodDrink = 7,
+        }
+
+
+
     }
+
+
 }
 
 
