@@ -32,6 +32,7 @@ namespace RapidNewsReportWebApp.Pages.Reports
 
         public async Task<IActionResult> OnPost()
         {
+            reportId = myReport.Id;
             bool success = await _newsReportApiClient.PutReport(myReport);
 
             if (!success)
@@ -45,6 +46,7 @@ namespace RapidNewsReportWebApp.Pages.Reports
 
         }
 
+	public string tester {get; set; }
         public int reportId { get; set; }
         
         //public Report myReport { get; set; }

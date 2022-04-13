@@ -7,34 +7,49 @@ Edit Report
 
 <p></p>The Report Id is : @Model.reportId;
 
+<p>@Model.myReport.Id</p>
 <p>@Model.myReport.Category</p>
 <p>@Model.myReport.CreatedBy</p>
 <p>@Model.myReport.Title</p>
 <p>@Model.myReport.Content</p>
+<p>@Model.myReport.CreatedDate</p>
+<p>@Model.myReport.UpdatedDate</p>
 
     <form method="post">
+	<span asp-validation-for="myReport.Title" class="text-danger"></span>            
         <div class="form-group">
-            <label asp-for="myReport.Title" class="col-form-label">Title</label>
-            <input asp-for="myReport.Title" class-"form-cotrol" value="@Model.myReport.Title"/>
+            <label asp-for="@Model.myReport.Title" class="col-form-label">Title</label>
+            <input asp-for="@Model.myReport.Title" class-"form-cotrol" value="@Model.myReport.Title"/>
         </div>
 
+	<span asp-validation-for="myReport.Content" class="text-danger"></span>        
         <div class="form-group">
-            <label asp-for="myReport.Content" class="col-form-label">Content</label>
-            <input asp-for="myReport.Content" class-"form-cotrol" value="@Model.myReport.Content"/>
+            <label asp-for="@Model.myReport.Content" class="col-form-label">Content</label>
+            <input asp-for="@Model.myReport.Content" class-"form-cotrol" value="@Model.myReport.Content"/>
         </div>
 
+	<span asp-validation-for="myReport.Category" class="text-danger"></span>        
         <div class="form-group">
-            <select asp-for="myReport.Category" asp-items="Html.GetEnumSelectList<EditModel.CategoryType>()">
+            <label asp-for="@Model.myReport.Category" class="col-form-label">Category</label>        
+            <select asp-for="@Model.myReport.Category" asp-items="Html.GetEnumSelectList<EditModel.CategoryType>()">
                 <option>Please select</option>
             </select>
         </div>
 
 
+	@if (!Model.myReport.IsPublished) 
+	{
+
+		<div class="form-group">
+		    <label asp-for="@Model.myReport.IsPublished" class="col-form-label">Publish ?</label>
+		    <input asp-for="@Model.myReport.IsPublished" />
+		</div>
+	}
+
+
         <div class="form-group">
-            <input asp-for="myReport.IsPublished" />
+            <input type="hidden" asp-for="@Model.myReport.Id" class-"form-cotrol" value="@Model.myReport.Id"/>
         </div>
-
-
 
         <button class="wt-20 col-12 btn btn-primary btn-lg">Submit</button>
     </form>

@@ -11,18 +11,22 @@ Add New Report
 
 <div class="mt-5">
     <form method="post">
+	<span asp-validation-for="newReport.Title" class="text-danger"></span>        
         <div class="form-group">
             <label asp-for="newReport.Title" class="col-form-label">Title</label>
-            <input asp-for="newReport.Title" class-"form-cotrol" />
+            <input asp-for="newReport.Title" class="col-form-cotrol" />
         </div>
 
+	<span asp-validation-for="newReport.Content" class="text-danger"></span>        
         <div class="form-group">
             <label asp-for="newReport.Content" class="col-form-label">Content</label>
-            <input asp-for="newReport.Content" class-"form-cotrol" />
+            <textarea asp-for="newReport.Content" class="form-cotrol" /></textarea>
         </div>
 
+	<span asp-validation-for="newReport.Category" class="text-danger"></span>        
         <div class="form-group">
-            <select asp-for="newReport.Category" asp-items="Html.GetEnumSelectList<NewModel.CategoryType>()">
+            <label asp-for="newReport.Category" class="col-form-label">News type</label>
+            <select class="col-form-control" asp-for="newReport.Category" asp-items="Html.GetEnumSelectList<NewModel.CategoryType>()">
                 <option selected="selected" value="">Please select</option>
             </select>
         </div>
@@ -33,12 +37,15 @@ Add New Report
 
 
         <div class="form-group">
-            <input asp-for="newReport.IsPublished" />
+	    <label asp-for="newReport.Category" class="col-form-label">News type</label>        
+            <input class="col-form-control" asp-for="newReport.IsPublished" />
         </div>
 
 
-
-        <button class="wt-20 col-12 btn btn-primary btn-lg">Submit</button>
+	<div class="form-group">
+                <input type="submit" value="Create" class="btn btn-success" />
+            </div>
+        
     </form>
 
 </div>

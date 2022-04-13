@@ -6,11 +6,16 @@ namespace RapidNewsReportWebApp.Models
     public class Report
     {
         public int Id { get; set; }
+        
+        [MinLength(10),MaxLength(100)]
         public string Title { get; set; }
+
+        [MinLength(50),MaxLength(1000)]
         public string Content { get; set; }
 
         [DataType(DataType.DateTime)]
         public DateTime CreatedDate { get; set; }
+
         [DataType(DataType.DateTime)]
         public DateTime UpdatedDate { get; set; }
 
@@ -19,10 +24,10 @@ namespace RapidNewsReportWebApp.Models
         [DataType(DataType.DateTime)]
         public DateTime PublishedDate { get; set; }
 
+	[Required]
         public CategoryType Category { get; set; }
 
         public Guid CreatedBy { get; set; }
-
     }
 
 

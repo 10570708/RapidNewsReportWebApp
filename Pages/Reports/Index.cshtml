@@ -1,23 +1,13 @@
 ﻿@page
-@model IndexModel
-@using RapidNewsReportWebApp.Models
+@model RapidNewsReportWebApp.Pages.Reports.IndexModel
 @{
-    ViewData["Title"] = "Home page";
 }
 
-<div class="mt-5">
-    
-        <p>Found: @Model.errorCMessage ...    
+
+      <p>Found: @Model.errorCMessage ...    
 
 
         <p>Found: @Model.errorRMessage ...    
-
-	    <form method="post">
-	            <select onChange="this.form.submit();" class="col-form-control" asp-for="@Model.viewCategory" asp-items="Html.GetEnumSelectList<CategoryType>()">
-	                <option selected="selected" value="">Filter by News Type</option>
-	            </select>
-	     </form>
-
             
 
             @foreach (var item in Model.Reports)
@@ -29,7 +19,8 @@
                 <p> This is @item.PublishedDate </p>
 
                 <a asp-page="/Reports/Edit" asp-route-id="@item.Id" class="w-20 vtn btn-primary m-2"> + Edit Report</a>
-                <form asp-page-handler="delete" method="post" asp-route-id="@item.Id"><button class="btn btn-default">Delete</button></form>
+		<button type="submit" asp-handler="delete" asp-route-id="@item.Id" class="w-20 vtn btn-primary m-2"> + Delete Report</button>
+		
             }
 
             <hr />
@@ -43,10 +34,8 @@
             }
 
             <hr />
-
-            <a asp-page="/Reports/New" class="w-20 vtn btn-primary m-2"> + Add New Report</a>
             
-        
-        </p>
-
-</div>
+            
+	<a asp-page="/Reports/New" class="w-20 vtn btn-primary m-2"> + Add New Report</a>     
+	
+	<h3 class="clearfix">@Model.Message</h3>	

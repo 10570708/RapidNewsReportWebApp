@@ -44,7 +44,25 @@ namespace RapidNewsReportWebApp.Services
         }
 
 
-        public async Task<IEnumerable<Report>> GetTodos()
+        public async Task<bool> DeleteReport(int id)
+        {
+            string myPath = $"api/Reports/{id}";
+            var response = await Client.DeleteAsync(myPath);
+            return response.IsSuccessStatusCode;
+        }
+
+
+
+        public async Task<IEnumerable<Report>> GetReportsbyCategory(int category)
+        {
+            string myPath = $"api/Reports?category={category}";
+        
+            return await Client.GetFromJsonAsync<IEnumerable<Report>>(myPath);
+
+        }
+
+
+        public async Task<IEnumerable<Report>> GetReports()
         {
             return await Client.GetFromJsonAsync<IEnumerable<Report>>("api/Reports");
 /*            var response = await Client.GetAsync("api/Reports");
@@ -55,10 +73,6 @@ namespace RapidNewsReportWebApp.Services
 */
         }
 
-        public async Task<string> GetReportListAsString()
-        {
-            return await Client.GetStringAsync("/api/Reports");
-        }
 
     }
 }
