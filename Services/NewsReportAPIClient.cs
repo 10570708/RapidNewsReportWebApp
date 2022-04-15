@@ -62,6 +62,26 @@ namespace RapidNewsReportWebApp.Services
         }
 
 
+        public async Task<IEnumerable<Report>> GetReportsbyUser(Guid id)
+        {
+            string myPath = $"api/Reports?guid={id}";
+        
+            return await Client.GetFromJsonAsync<IEnumerable<Report>>(myPath);
+
+        }
+
+
+
+        public async Task<IEnumerable<Report>> GetReportsbyUserCategory(Guid id, int category)
+        {
+            string myPath = $"api/Reports?guid={id}&category={category}";
+        
+            return await Client.GetFromJsonAsync<IEnumerable<Report>>(myPath);
+
+        }
+
+
+
         public async Task<IEnumerable<Report>> GetReports()
         {
             return await Client.GetFromJsonAsync<IEnumerable<Report>>("api/Reports");

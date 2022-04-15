@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RapidNewsReportWebApp.Services;
 using RapidNewsReportWebApp.Models;
+using System.ComponentModel.DataAnnotations;
+
 
 
 namespace RapidNewsReportWebApp.Pages.Reports
@@ -55,14 +57,17 @@ namespace RapidNewsReportWebApp.Pages.Reports
         public Report myReport { get; set; }
         public enum CategoryType
         {
-            LocalNews = 0,
-            WorldNews = 1,
-            Sport = 2,
-            Entertainment = 3,
-            Weather = 4,
-            Politics = 5,
-            Opinion = 6,
-            FoodDrink = 7,
+            [Display(Name = "Local News")]
+            LocalNews = 1,
+            [Display(Name = "World News")]
+            WorldNews = 2,
+            Sport = 3,
+            Entertainment = 4,
+            Weather = 5,
+            Politics = 6,
+            Opinion = 7,
+            [Display(Name = "Food & Drink")]
+            FoodDrink = 8
         }
 
 

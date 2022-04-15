@@ -34,10 +34,24 @@ namespace RapidNewsReportWebApp.Pages
 
         public async Task<IActionResult> OnPost()
         {
-            errorRMessage = "Submitted and value is  " + viewCategory.ToString();
+            errorRMessage = "Submitted and value is  " + viewCategory.ToString() + " and user is "  + createdBy.ToString() + " and viel all ";
 
-
-            Reports =  await _newsReportApiClient.GetReportsbyCategory(viewCategory);
+	    if (viewAll)
+	    {
+	    	errorRMessage += "viewing all ...";
+            	Reports =  await _newsReportApiClient.GetReportsbyCategory(viewCategory);
+            }
+            else
+            {
+            	if (viewCategory == 0)
+            	{
+            		Reports =  await _newsReportApiClient.GetReportsbyUser(createdBy);
+            	}
+            	else
+            	{
+            		Reports =  await _newsReportApiClient.GetReportsbyUserCategory(createdBy,viewCategory);
+            	}
+            }
             Comments = await _newsCommentApiClient.GetCommentList();
 
 
@@ -83,6 +97,12 @@ namespace RapidNewsReportWebApp.Pages
 
 	[BindProperty]        
 	public int viewCategory {get; set; } = 0;
+	
+	[BindProperty]    
+	public Guid createdBy {get; set; }
+
+	[BindProperty]    
+	public bool viewAll {get; set; }
 
         public string errorCMessage { get; set; }  = "";
         public IEnumerable<Report> Reports { get; set; } = Enumerable.Empty<Report>();

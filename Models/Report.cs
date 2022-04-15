@@ -34,15 +34,15 @@ namespace RapidNewsReportWebApp.Models
     public enum CategoryType
     {
         [Display(Name = "Local News")]
-        LocalNews = 0,
+        LocalNews = 1,
         [Display(Name = "World News")]
-        WorldNews = 1,
-        Sport = 2,
-        Entertainment = 3,
-        Weather = 4,
-        Politics = 5,
-        Opinion = 6,
+        WorldNews = 2,
+        Sport = 3,
+        Entertainment = 4,
+        Weather = 5,
+        Politics = 6,
+        Opinion = 7,
         [Display(Name = "Food & Drink")]
-        FoodDrink = 7,
+        FoodDrink = 8,
     }
 }

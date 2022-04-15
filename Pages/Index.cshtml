@@ -1,35 +1,68 @@
 ﻿@page
 @model IndexModel
 @using RapidNewsReportWebApp.Models
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 @{
     ViewData["Title"] = "Home page";
 }
 
 <div class="mt-5">
+	<p>
+	
+	<img height="25" src="images/WorldNews.jpg" alt="Sample Photo" />
+	<img height="25" src="images/LocalNews.jpg" alt="Sample Photo" />
+	<img height="25" src="images/Sport.jpg" alt="Sample Photo" />
+	<img height="25" src="images/Opinion.jpg" alt="Sample Photo" />
+	<img height="25" src="images/Entertainment.jpg" alt="Sample Photo" />
+	<img height="25" src="images/FoodDrink.jpg" alt="Sample Photo" />
+	<img height="25" src="images/Politics.jpg" alt="Sample Photo" />
+	<img height="25" src="images/Weather.jpg" alt="Sample Photo" />
     
-        <p>Found: @Model.errorCMessage ...    
-
-
-        <p>Found: @Model.errorRMessage ...    
+	<p>
+	<hr/>
 
 	    <form method="post">
-	            <select onChange="this.form.submit();" class="col-form-control" asp-for="@Model.viewCategory" asp-items="Html.GetEnumSelectList<CategoryType>()">
-	                <option selected="selected" value="">Filter by News Type</option>
+	            <select class="col-form-control" asp-for="@Model.viewCategory" asp-items="Html.GetEnumSelectList<CategoryType>()">
+	                <option value="">Filter by News Type</option>
 	            </select>
+	            <select class="col-form-control" asp-for="@Model.viewAll">
+			     <option value="true">View All</option>
+			     <option value="false">View Mine</option>
+	            </select>
+		    <input type="hidden" asp-for="@Model.createdBy" class-"form-cotrol" value="@UserManager.GetUserId(User)"/>
+	            <input name="submit" type="image" src="/images/filter.jpg" value="Filter" height="30" valign="bottom"/>
 	     </form>
+	     
 
-            
+            <p>
+            <hr />
 
             @foreach (var item in Model.Reports)
             {
-                <p> This is @item.Title </p>
-                <p> This is @item.Id </p>
-                <p> This is @item.CreatedBy </p>
-                <p> This is @item.CreatedDate </p>
-                <p> This is @item.PublishedDate </p>
-
-                <a asp-page="/Reports/Edit" asp-route-id="@item.Id" class="w-20 vtn btn-primary m-2"> + Edit Report</a>
-                <form asp-page-handler="delete" method="post" asp-route-id="@item.Id"><button class="btn btn-default">Delete</button></form>
+		<div class="row">
+		  <div class="col-md-3">
+		  	<img height="50" src="images/@(item.Category).jpg" alt="Sample Photo" /></div>
+		  <div class="col-md-6">
+			<p> Title @item.Title </p>
+			<p> Id is @item.Id </p>
+			<p> Author is @item.CreatedBy </p>
+			<p> Created  @item.CreatedDate </p>
+			<p> Published @item.PublishedDate </p>
+			<p> Category is @item.Category</p>		  
+		  
+		  </div>
+		  <div class="col-md-3"> 
+			<div class="row">
+			@if(@item.CreatedBy.ToString() == @UserManager.GetUserId(User).ToString())
+			{
+				<div class="text-center"><a asp-page="/Reports/Edit" asp-route-id="@item.Id" style="width:50%" class="btn btn-primary">Update</a></div>
+				<div class="text-center"><form asp-page-handler="delete" method="post" asp-route-id="@item.Id"><button style="width:50%" class="btn btn-secondary">Delete</button></form></div>
+			}
+                	</div>
+		  </div>
+		</div>  
+		<hr/>
             }
 
             <hr />
@@ -44,7 +77,7 @@
 
             <hr />
 
-            <a asp-page="/Reports/New" class="w-20 vtn btn-primary m-2"> + Add New Report</a>
+            <a asp-page="/Reports/New" class="btn btn-success"> + Add New Report</a>
             
         
         </p>
