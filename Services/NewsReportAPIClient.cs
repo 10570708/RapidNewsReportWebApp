@@ -9,18 +9,15 @@ namespace RapidNewsReportWebApp.Services
 
         public NewsReportAPIClient(HttpClient client)
         {
-
             client.BaseAddress = new System.Uri("https://localhost:7166/");
-
             client.DefaultRequestHeaders.Add("Accept", "application/json");
-
             Client = client;
         }
 
-        public async Task<IEnumerable<Report>> GetReportList()
-        {
-            return await Client.GetFromJsonAsync<IEnumerable<Report>>("api/Reports/1");
-        }
+
+	// Get Single Report
+	// Http Get to api/Reports/{id}
+
 
         public async Task<Report> GetReport(int ID)
         {
@@ -29,6 +26,9 @@ namespace RapidNewsReportWebApp.Services
         }
 
 
+	// Create Report
+	// Http Post to api/Reports passing Report
+
         public async Task<bool> PostReport(Report myReport)
         {
             var response = await Client.PostAsJsonAsync<Report>("api/Reports", myReport);
@@ -36,13 +36,31 @@ namespace RapidNewsReportWebApp.Services
         }
 
 
+	// Update Report
+	// Http Put to api/Reports/{id} 
+
         public async Task<bool> PutReport(Report myReport)
         {
+
             string myPath = $"api/Reports/{myReport.Id}";
+            
+            //string myPath = $"api/Reports/44";
             var response = await Client.PutAsJsonAsync<Report>(myPath, myReport);
-            return response.IsSuccessStatusCode;
+
+	    if (!response.IsSuccessStatusCode)
+	    {
+	    	var code = (int)response.StatusCode;
+		throw new Exception(code.ToString()+" - testing return code  ");	    
+	    }
+	    else
+	    {
+	            return response.IsSuccessStatusCode;
+	    }
+            
         }
 
+	// Delete Report
+	// Http Delete to api/Reports/{id} 
 
         public async Task<bool> DeleteReport(int id)
         {
@@ -52,19 +70,36 @@ namespace RapidNewsReportWebApp.Services
         }
 
 
+	// Get reports by category
+	// Http Get to api/Reports passing category
 
-        public async Task<IEnumerable<Report>> GetReportsbyCategory(int category)
+        public async Task<IEnumerable<Report>> GetReportsbyCategory(int category, bool desc)
         {
-            string myPath = $"api/Reports?category={category}";
+            string myPath = $"api/Reports?category={category}&desc={desc}";
         
             return await Client.GetFromJsonAsync<IEnumerable<Report>>(myPath);
 
         }
 
 
-        public async Task<IEnumerable<Report>> GetReportsbyUser(Guid id)
+	// Get reports by user
+	// Http Get to api/Reports passing guid
+
+        public async Task<IEnumerable<Report>> GetReportsbyUser(Guid id, bool desc)
         {
-            string myPath = $"api/Reports?guid={id}";
+            string myPath = $"api/Reports?guid={id}&desc={desc}";
+        
+            return await Client.GetFromJsonAsync<IEnumerable<Report>>(myPath);
+
+        }
+
+
+	// Get reports by user and category
+	// Http Get to api/Reports passing guid and category parameters
+
+        public async Task<IEnumerable<Report>> GetReportsbyUserCategory(Guid id, int category, bool desc)
+        {
+            string myPath = $"api/Reports?guid={id}&category={category}&desc={desc}";
         
             return await Client.GetFromJsonAsync<IEnumerable<Report>>(myPath);
 
@@ -72,27 +107,24 @@ namespace RapidNewsReportWebApp.Services
 
 
 
-        public async Task<IEnumerable<Report>> GetReportsbyUserCategory(Guid id, int category)
-        {
-            string myPath = $"api/Reports?guid={id}&category={category}";
-        
-            return await Client.GetFromJsonAsync<IEnumerable<Report>>(myPath);
-
-        }
-
-
-
+	// Get full lit of reports 
+	// http get to /api/Reports 
+	
         public async Task<IEnumerable<Report>> GetReports()
         {
-            return await Client.GetFromJsonAsync<IEnumerable<Report>>("api/Reports");
-/*            var response = await Client.GetAsync("api/Reports");
+            var result = await Client.GetAsync("/api/Reports");
 
-            response.EnsureSuccessStatusCode();
-            string data = await response.Content.ReadAsStringAsync();
-            return System.Text.Json.JsonSerializer.Deserialize<List<Report>>(data);
-*/
+            if (result.IsSuccessStatusCode)
+            {
+                return await result.Content.ReadFromJsonAsync<IEnumerable<Report>>();
+            }
+            else
+            {
+                string msg = await result.Content.ReadAsStringAsync();
+                var code = (int)result.StatusCode;
+                throw new Exception(code.ToString() + msg);
+            }
         }
-
 
     }
 }

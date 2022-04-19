@@ -3,53 +3,58 @@
 @{
 }
 
-Edit Report 
+<div class="mt-5">
 
-<p></p>The Report Id is : @Model.reportId;
+	<h1>Edit News Report</h1>
 
-<p>@Model.myReport.Id</p>
-<p>@Model.myReport.Category</p>
-<p>@Model.myReport.CreatedBy</p>
-<p>@Model.myReport.Title</p>
-<p>@Model.myReport.Content</p>
-<p>@Model.myReport.CreatedDate</p>
-<p>@Model.myReport.UpdatedDate</p>
+    <hr/>
 
-    <form method="post">
-	<span asp-validation-for="myReport.Title" class="text-danger"></span>            
-        <div class="form-group">
-            <label asp-for="@Model.myReport.Title" class="col-form-label">Title</label>
-            <input asp-for="@Model.myReport.Title" class-"form-cotrol" value="@Model.myReport.Title"/>
-        </div>
+	    @if(TempData["FormResult"] != null)
+	    {
+		    <div class="alert alert-success" role="alert">@TempData["FormResult"]</div>
+	    }
 
-	<span asp-validation-for="myReport.Content" class="text-danger"></span>        
-        <div class="form-group">
-            <label asp-for="@Model.myReport.Content" class="col-form-label">Content</label>
-            <input asp-for="@Model.myReport.Content" class-"form-cotrol" value="@Model.myReport.Content"/>
-        </div>
+        <form method="post">
 
-	<span asp-validation-for="myReport.Category" class="text-danger"></span>        
-        <div class="form-group">
-            <label asp-for="@Model.myReport.Category" class="col-form-label">Category</label>        
-            <select asp-for="@Model.myReport.Category" asp-items="Html.GetEnumSelectList<EditModel.CategoryType>()">
-                <option>Please select</option>
-            </select>
-        </div>
+	     <span asp-validation-for="myReport.Title" class="text-danger"></span>        
+            <div class="mb-3">
+              <label asp-for="myReport.Title" class="form-label">Report Title</label>
+             <input asp-for="myReport.Title"  class="form-control" value="@Model.myReport.Title">
+            </div>
 
 
-	@if (!Model.myReport.IsPublished) 
-	{
-
-		<div class="form-group">
-		    <label asp-for="@Model.myReport.IsPublished" class="col-form-label">Publish ?</label>
-		    <input asp-for="@Model.myReport.IsPublished" />
-		</div>
-	}
+	     <span asp-validation-for="myReport.Content" class="text-danger"></span>        
+            <div class="mb-3">
+              <label asp-for="myReport.Content" class="form-label">News Report</label>
+              <textarea asp-for="myReport.Content" class="form-control"  rows="3" value="@Model.myReport.Content"></textarea>
+            </div>
 
 
-        <div class="form-group">
-            <input type="hidden" asp-for="@Model.myReport.Id" class-"form-cotrol" value="@Model.myReport.Id"/>
-        </div>
+	     <span asp-validation-for="myReport.Category" class="text-danger"></span>        
+            <div class="mb-3">
+                <label asp-for="myReport.Category" class="form-label">Select Category</label>
+                <select class="form-control" asp-for="myReport.Category" asp-items="Html.GetEnumSelectList<EditModel.CategoryType>()">
+                </select>
+            </div>
 
-        <button class="wt-20 col-12 btn btn-primary btn-lg">Submit</button>
-    </form>
+
+
+    	    @if (!Model.myReport.IsPublished) 
+	        {
+                <div class="mb-3">
+                   <label asp-for="@Model.myReport.IsPublished" class="form-label">Publish Now    </label>        
+                   <input class="form-check-input" asp-for="@Model.myReport.IsPublished" />
+                </div>
+    	    }
+    	    else
+    	    {
+    	    	<div class="form-group"><input type="hidden" value="true" asp-for="@Model.myReport.IsPublished"></div>
+	   }
+
+            <div class="form-group"><input type="hidden" asp-for="@Model.myReport.Id" class-"form-cotrol" value="@Model.myReport.Id"/></div>
+
+
+	        <div class="form-group row"><input type="submit" value="Update News Report" class="btn btn-success" /></div>
+
+        </form>
+</div>

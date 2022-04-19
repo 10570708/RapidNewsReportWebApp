@@ -10,6 +10,8 @@ namespace RapidNewsReportWebApp.Pages.Reports
 {
     public class EditModel : PageModel
     {
+ 	[TempData]   
+ 	public string FormResult { get; set; }
 
         private readonly NewsReportAPIClient _newsReportApiClient;
         private readonly NewsCommentAPIClient _newsCommentApiClient;
@@ -35,17 +37,24 @@ namespace RapidNewsReportWebApp.Pages.Reports
         public async Task<IActionResult> OnPost()
         {
             reportId = myReport.Id;
-            bool success = await _newsReportApiClient.PutReport(myReport);
-
-            if (!success)
+            try 
             {
-                return Page();
-            }
-            else
-            {
-                return RedirectToPage("../Index");
-            }
-
+	            bool success = await _newsReportApiClient.PutReport(myReport);
+		    if (!success)
+		    {
+			return Page();
+		    }
+		    else
+		    {
+            		FormResult = "Your new Report has been updated successfully.";
+			return RedirectToPage("Index", new { ID = myReport.Id });
+		    }
+	    }
+	    catch (Exception e)
+	    {
+            	FormResult = "There was an error writing your report.";	    	
+		return Page();                
+	    }
         }
 
 	public string tester {get; set; }

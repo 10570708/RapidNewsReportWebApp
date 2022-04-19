@@ -8,6 +8,11 @@ namespace RapidNewsReportWebApp.Pages.Reports
 {
     public class IndexModel : PageModel
     { 
+    
+ 	[TempData]   
+ 	public string FormResult { get; set; }
+ 	
+    
 
 	public string Message { get; set; } = "Initial Request";
         private readonly NewsReportAPIClient _newsReportApiClient;
@@ -22,10 +27,45 @@ namespace RapidNewsReportWebApp.Pages.Reports
         public string responseContent { get; set; }
         
 
+    	public async Task<IActionResult> OnPostAddComment(int id, Guid createdBy)  
+    	{  
+            myComment.ReportId = id;
+            myComment.CreatedBy = createdBy;
+            
+            bool success = await _newsCommentApiClient.PostComment(myComment);
+            myReport = await _newsReportApiClient.GetReport(id);
+	    Comments = await _newsCommentApiClient.GetComments(myReport.Id);            
+	    progressMessage = "Your comment has been added";            
+            return Page();
+	}        
+
+
+    	public async Task<IActionResult> OnPostPutComment(int id, int reportId, Guid createdBy)  
+    	{  
+            myComment.ReportId = reportId;
+            myComment.CreatedBy = createdBy;
+            myComment.Id = id;
+            
+            
+            bool success = await _newsCommentApiClient.PutComment(myComment);
+            myReport = await _newsReportApiClient.GetReport(reportId);
+            Comments = await _newsCommentApiClient.GetComments(reportId);
+	    progressMessage = "Your comment has been updated"; 
+            return Page();
+	}        
+
+
+    	public async Task<IActionResult> OnPostViewComments(int id)  
+    	{  
+            Comments = await _newsCommentApiClient.GetComments(id);
+            myReport = await _newsReportApiClient.GetReport(id);
+            return Page();
+	}        
+
+
 
     	public async Task<IActionResult> OnPostDelete(int id)  
     	{  
-	    Message = "Delete handler fired";    	
             bool success = await _newsReportApiClient.DeleteReport(id);
 
             if (!success)
@@ -34,48 +74,83 @@ namespace RapidNewsReportWebApp.Pages.Reports
             }
             else
             {
+		progressMessage = "Your Report has been successfully deleted.";            
                 return RedirectToPage("../Index");
             }
 
 	}        
+	
+	public async Task<IActionResult> OnPostDeleteComment(int id, int reportId)  
+    	{  
+            bool success = await _newsCommentApiClient.DeleteComment(id);
 
-        public async Task<IActionResult> OnGetAsync()
+            if (!success)
+            {
+                return Page();
+            }
+            else
+            {
+		FormResult = "Your Comment has been successfully deleted.";            
+		myReport = await _newsReportApiClient.GetReport(reportId);
+		Comments = await _newsCommentApiClient.GetComments(reportId);
+		progressMessage = "Your Comment has been successfully deleted."; 
+                return Page();
+            }
+
+	}        	
+
+ 	public async Task<IActionResult> OnGetAsync(int ID)
         {
-            /*
-             using var client = new HttpClient();
+            myReport = await _newsReportApiClient.GetReport(ID);
+            return Page();
+        }
+        
 
-             client.BaseAddress = new Uri("https://localhost:7166/");
-             client.DefaultRequestHeaders.Add("Accept","application/json");
+        public async Task<IActionResult> OnPost()
+        {
+	        if (viewAll)
+	        {
+	    	    
+            	Comments =  await _newsCommentApiClient.GetComments(ID, viewDesc);
+            }
+            else
+            {
+            		Comments =  await _newsCommentApiClient.GetComments(ID, createdBy, viewDesc);
+            }
 
-
-             HttpResponseMessage response = await client.GetAsync("/api/Reports/1");
-             if (response.IsSuccessStatusCode)
-             {
-                 errorCMessage = await response.Content.ReadAsStringAsync();
-                 //Report myreport = JsonConvert.DeserializeObject<Report>(errorCMessage);
-             }
-
-
-             foreach (var rep in await _newsReportApiClient.GetReports())
-             {
-                 errorRMessage += "Adding error msg ... ";
-             }
-
-
-             Report report = await client.GetFromJsonAsync<Report>("api/Reports/1");
-
-            */
-            Reports = await _newsReportApiClient.GetReports();
-            Comments = await _newsCommentApiClient.GetCommentList();
-
-            //Reports.Append(report);
+	    myReport = await _newsReportApiClient.GetReport(ID);
 
             return Page();
-
         }
 
 
-        public string errorRMessage { get; set; } = "Test";
+        [BindProperty]
+        public string CommentText { get; set; }
+
+
+        [BindProperty]
+        public bool viewAll { get; set; } = true;
+        
+	[BindProperty]
+        public int ID { get; set; }        
+        
+	[BindProperty]
+        public Guid createdBy { get; set; }        
+
+
+        [BindProperty]
+        public bool viewDesc { get; set; } = true;
+        
+
+	[BindProperty]
+	public Report myReport { get; set; }
+	
+	[BindProperty]
+	public Comment myComment { get; set; }	
+
+        public string errorRMessage { get; set; }
+        
+        public string progressMessage { get; set; }
 
         public string errorCMessage { get; set; } = "";
         public IEnumerable<Report> Reports { get; set; } = Enumerable.Empty<Report>();

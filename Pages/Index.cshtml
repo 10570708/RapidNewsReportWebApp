@@ -8,78 +8,113 @@
 }
 
 <div class="mt-5">
-	<p>
+	<P>
 	
-	<img height="25" src="images/WorldNews.jpg" alt="Sample Photo" />
-	<img height="25" src="images/LocalNews.jpg" alt="Sample Photo" />
-	<img height="25" src="images/Sport.jpg" alt="Sample Photo" />
-	<img height="25" src="images/Opinion.jpg" alt="Sample Photo" />
-	<img height="25" src="images/Entertainment.jpg" alt="Sample Photo" />
-	<img height="25" src="images/FoodDrink.jpg" alt="Sample Photo" />
-	<img height="25" src="images/Politics.jpg" alt="Sample Photo" />
-	<img height="25" src="images/Weather.jpg" alt="Sample Photo" />
-    
-	<p>
-	<hr/>
+		
+		@if (SignInManager.IsSignedIn(User))
+	    {
 
-	    <form method="post">
-	            <select class="col-form-control" asp-for="@Model.viewCategory" asp-items="Html.GetEnumSelectList<CategoryType>()">
-	                <option value="">Filter by News Type</option>
-	            </select>
-	            <select class="col-form-control" asp-for="@Model.viewAll">
-			     <option value="true">View All</option>
-			     <option value="false">View Mine</option>
-	            </select>
-		    <input type="hidden" asp-for="@Model.createdBy" class-"form-cotrol" value="@UserManager.GetUserId(User)"/>
-	            <input name="submit" type="image" src="/images/filter.jpg" value="Filter" height="30" valign="bottom"/>
-	     </form>
-	     
-
-            <p>
-            <hr />
-
-            @foreach (var item in Model.Reports)
-            {
-		<div class="row">
-		  <div class="col-md-3">
-		  	<img height="50" src="images/@(item.Category).jpg" alt="Sample Photo" /></div>
-		  <div class="col-md-6">
-			<p> Title @item.Title </p>
-			<p> Id is @item.Id </p>
-			<p> Author is @item.CreatedBy </p>
-			<p> Created  @item.CreatedDate </p>
-			<p> Published @item.PublishedDate </p>
-			<p> Category is @item.Category</p>		  
-		  
-		  </div>
-		  <div class="col-md-3"> 
-			<div class="row">
-			@if(@item.CreatedBy.ToString() == @UserManager.GetUserId(User).ToString())
+			if(TempData["FormResult"] != null)
 			{
-				<div class="text-center"><a asp-page="/Reports/Edit" asp-route-id="@item.Id" style="width:50%" class="btn btn-primary">Update</a></div>
-				<div class="text-center"><form asp-page-handler="delete" method="post" asp-route-id="@item.Id"><button style="width:50%" class="btn btn-secondary">Delete</button></form></div>
+				<div class="alert alert-success" role="alert">@TempData["FormResult"]</div>
 			}
-                	</div>
-		  </div>
-		</div>  
-		<hr/>
-            }
 
-            <hr />
+			if(Model.errorRMessage != null)
+			{
+				<div class="alert alert-warning" role="alert">@Model.errorRMessage</div>
+			}
+			
+			<div id="logobar" align="center">
 
-            @foreach (var item in Model.Comments)
-            {
-                <p> This is @item.CommentText </p>
-                <p> This is @item.CreatedBy </p>
-                <p> This is @item.CreatedDate </p>
-                <p> This is @item.Id </p>
-            }
+				<img src="images/WorldNews.jpg" alt="Sample Photo" height="20"/>
+				<img src="images/LocalNews.jpg" alt="Sample Photo"  height="20"/>
+				<img src="images/Sport.jpg" alt="Sample Photo"  height="20"/>
+				<img src="images/Opinion.jpg" alt="Sample Photo"  height="20"/>
+				<img src="images/Entertainment.jpg" alt="Sample Photo"  height="20"/>
+				<img src="images/FoodDrink.jpg" alt="Sample Photo" height="20" />
+				<img src="images/Politics.jpg" alt="Sample Photo"  height="20"/>
+				<img src="images/Weather.jpg" alt="Sample Photo"  height="20"/>
+				<a asp-page="/Reports/New" class="btn btn-success"> + Add New Report</a>
+				<p><hr></p>
 
-            <hr />
+			</div>
 
-            <a asp-page="/Reports/New" class="btn btn-success"> + Add New Report</a>
+            		
+			<div class="row">
+			<div class="col" align="left"><h1>View Report Summary</h1></div>
+			<div class="col" align="right">
+
+				<form method="post">
+						<select class="col-form-control" asp-for="@Model.viewCategory" asp-items="Html.GetEnumSelectList<CategoryType>()">
+							<option value="">Filter by News Type</option>
+						</select>
+						<select class="col-form-control" asp-for="@Model.viewAll">
+						 <option value="true">View All</option>
+						 <option value="false">View Mine</option>
+						</select>
+						<select class="col-form-control" asp-for="@Model.viewDesc">
+						 <option value="true">Newest First</option>
+						 <option value="false">Oldest First</option>
+						</select>
+						<input type="hidden" asp-for="@Model.createdBy" class-"form-cotrol" value="@UserManager.GetUserId(User)"/>
+						<input name="submit" type="submit" value="Filter" class="input-btn"/>
+				 </form>
+
+			</div>
+			<hr>
+			</div>
+
+			if(Model.errorRMessage == null)
+			{
+				if (Model.Reports.Count() == 0)
+				{
+					<div class="alert alert-success" role="alert">There were no matches found. Try changing your filters.</div>		    
+				}
+				else
+				{
+					@foreach (var item in Model.Reports)
+					{
+						<div class="row">
+							<div class="col-md-2"><img src="images/@(item.Category).jpg" alt="Sample Photo" /></div>
+							<div class="col-md-8">
+								<h2> Title @item.Title </h2>
+								<p> @item.Content.Substring(0, Math.Min(@item.Content.Length, 500)) ...
+								<div class="row">
+									<div class="col-sm small">Created:  @item.CreatedDate </div>
+									<div class="col-sm small"> Published: @item.PublishedDate </div>
+									<div class="col-sm small"> Updated: @item.UpdatedDate </div>
+								</div>
+							</div>
+							<div class="col-md-2"> 
+								<div class="row">
+									@if(@item.CreatedBy.ToString() == @UserManager.GetUserId(User).ToString())
+									{
+										<div class="text-center"><a asp-page="/Reports/Edit" asp-route-id="@item.Id" style="width:50%" class="btn btn-outline-primary">Update</a></div>
+										<div class="text-center"><form asp-page-handler="delete" method="post" asp-route-id="@item.Id"><button style="width:50%" class="btn btn-outline-secondary">Delete</button></form></div>
+										<div class="text-center"><a asp-page="/Reports/Index" asp-route-id="@item.Id" style="width:50%" class="btn btn-outline-info">View</a></div>										
+										<div class="text-center"><a asp-page="/Reports/Index" asp-page-handler="ViewComments" asp-route-id="@item.Id" style="width:50%" class="btn btn-outline-success">Comment</a></div>										
+									}
+								</div>
+							</div>
+						</div>  
+						<hr/>
+					}
+				}
+			}
+
+
+
+
+		}
+		else
+		{
+			<h1>Welcome</h1>
+		
+			<center><img src="images/welcomelogo.jpg" alt="Sample Photo" /></center>
+		}
+
             
         
-        </p>
+        </P>
 
 </div>

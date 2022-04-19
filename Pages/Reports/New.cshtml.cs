@@ -9,6 +9,11 @@ namespace RapidNewsReportWebApp.Pages.Reports
 {
     public class NewModel : PageModel
     {
+ 	[TempData]   
+ 	public string FormResult { get; set; }
+
+   	
+
         private readonly NewsReportAPIClient _newsReportApiClient;
 
         public NewModel(NewsReportAPIClient newsReportApiClient)
@@ -21,7 +26,7 @@ namespace RapidNewsReportWebApp.Pages.Reports
             return Page();
         }
 
-        public async Task<IActionResult> OnPost()
+        public async Task<IActionResult> OnPost(Report newReport)
         {
             bool success = await _newsReportApiClient.PostReport(newReport);
 
@@ -31,6 +36,7 @@ namespace RapidNewsReportWebApp.Pages.Reports
             }
             else
             {
+            	FormResult = "Your new Report has been created successfully.";
                 return RedirectToPage("../Index");
             }
 

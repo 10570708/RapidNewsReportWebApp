@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "uKqWPyUNgfEqM/KZ0uxu/5Bjnj8cuJdliP0UAW+mly0=",
+  "Hash": "JvaSE9+1AJessQThQqfg/lwANchlJsfyP3V3qbGSejw=",
   "Source": "RapidNewsReportWebApp",
   "BasePath": "_content/RapidNewsReportWebApp",
   "Mode": "Default",
@@ -1105,6 +1105,23 @@
       "OriginalItemSpec": "wwwroot\\favicon.ico"
     },
     {
+      "Identity": "C:\\Users\\pauld\\Projects\\CA\\RapidNewsReportWebApp\\wwwroot\\images\\comments.jpg",
+      "SourceId": "RapidNewsReportWebApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\pauld\\Projects\\CA\\RapidNewsReportWebApp\\wwwroot\\",
+      "BasePath": "_content/RapidNewsReportWebApp",
+      "RelativePath": "images/comments.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\comments.jpg"
+    },
+    {
       "Identity": "C:\\Users\\pauld\\Projects\\CA\\RapidNewsReportWebApp\\wwwroot\\images\\Entertainment.jpg",
       "SourceId": "RapidNewsReportWebApp",
       "SourceType": "Discovered",
@@ -1120,23 +1137,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\Entertainment.jpg"
-    },
-    {
-      "Identity": "C:\\Users\\pauld\\Projects\\CA\\RapidNewsReportWebApp\\wwwroot\\images\\filter.jpg",
-      "SourceId": "RapidNewsReportWebApp",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\pauld\\Projects\\CA\\RapidNewsReportWebApp\\wwwroot\\",
-      "BasePath": "_content/RapidNewsReportWebApp",
-      "RelativePath": "images/filter.jpg",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\filter.jpg"
     },
     {
       "Identity": "C:\\Users\\pauld\\Projects\\CA\\RapidNewsReportWebApp\\wwwroot\\images\\FoodDrink.jpg",
@@ -1273,6 +1273,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\Weather.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\pauld\\Projects\\CA\\RapidNewsReportWebApp\\wwwroot\\images\\welcomelogo.jpg",
+      "SourceId": "RapidNewsReportWebApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\pauld\\Projects\\CA\\RapidNewsReportWebApp\\wwwroot\\",
+      "BasePath": "_content/RapidNewsReportWebApp",
+      "RelativePath": "images/welcomelogo.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\welcomelogo.jpg"
     },
     {
       "Identity": "C:\\Users\\pauld\\Projects\\CA\\RapidNewsReportWebApp\\wwwroot\\images\\WorldNews.jpg",
