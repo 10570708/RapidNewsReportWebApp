@@ -4,149 +4,207 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 @{
+    if (Model.myReport == null)
+    {
+        Model.myReport = new Report();
+        Model.myReport.Id = 0;
+        Model.myReport.CreatedBy = new Guid();
+    }
+
+
 }
-
 <div class="mt-5">
-	<P>
+    <P>
 
-		@if (SignInManager.IsSignedIn(User))
-	    {
+        @if (SignInManager.IsSignedIn(User))
+        {
 
-			if(Model.progressMessage != null)
-			{
-				<div class="alert alert-success" role="alert">@Model.progressMessage</div>
-			}
-
-			if(Model.errorRMessage != null)
-			{
-				<div class="alert alert-warning" role="alert">@Model.errorRMessage</div>
-			}
-
-			<div id="logobar" align="center">
-
-				<img src="images/WorldNews.jpg" alt="Sample Photo" />
-				<img src="images/LocalNews.jpg" alt="Sample Photo" />
-				<img src="images/Sport.jpg" alt="Sample Photo" />
-				<img src="images/Opinion.jpg" alt="Sample Photo" />
-				<img src="images/Entertainment.jpg" alt="Sample Photo" />
-				<img src="images/FoodDrink.jpg" alt="Sample Photo" />
-				<img src="images/Politics.jpg" alt="Sample Photo" />
-				<img src="images/Weather.jpg" alt="Sample Photo" />
-
-				
-				<p><hr></p>
-
-			</div>
-
-			if(Model.errorRMessage == null)
-			{
-				if (Model.myReport.Id != null)
-				{
-					<div class="row">
-						<div class="col-md-2"><img src="images/@(Model.myReport.Category).jpg" alt="Sample Photo" /></div>
-						<div class="col-md-8">
-							<h2> @Model.myReport.Title </h2>
-							<P class="newsreport">@Model.myReport.Content</P>
-							<p> Created  @Model.myReport.CreatedDate </p>
-							<p> Published @Model.myReport.PublishedDate </p>
-						</div>
-						<div class="col-md-2"  style="display:inline-flex;"> 
-							@if (@Model.myReport.CreatedBy.ToString() == @UserManager.GetUserId(User).ToString())
-							{
-								<div class="text-center"><a asp-page="/Reports/Edit" asp-route-id="@Model.myReport.Id" class="btn btn-primary">Update</a></div>
-								<div class="text-center"><form asp-page-handler="delete" method="post" asp-route-id="@Model.myReport.Id"><button class="btn btn-secondary">Delete</button></form></div>
-							}
-						</div>
-					</div>
+            if (@Model.FormResult != null)
+            {
+                <div class="alert alert-success" role="alert">@Model.FormResult</div>
+            }
 
 
-				}
-			}
+            if (Model.progressMessage != null)
+            {
+                <div class="alert alert-success" role="alert">@Model.progressMessage</div>
+            }
+
+            if (Model.errorRMessage != null)
+            {
+                <div class="alert alert-warning" role="alert">@Model.errorRMessage</div>
+            }
+
+            <div id="logobar" align="center">
+
+                <img src="images/WorldNews.jpg" alt="Sample Photo" />
+                <img src="images/LocalNews.jpg" alt="Sample Photo" />
+                <img src="images/Sport.jpg" alt="Sample Photo" />
+                <img src="images/Opinion.jpg" alt="Sample Photo" />
+                <img src="images/Entertainment.jpg" alt="Sample Photo" />
+                <img src="images/FoodDrink.jpg" alt="Sample Photo" />
+                <img src="images/Politics.jpg" alt="Sample Photo" />
+                <img src="images/Weather.jpg" alt="Sample Photo" />
 
 
-				<hr />
+                <p><hr></p>
 
-				<div class="row">
-					<div class="col-md-12"><img src="images/comments.jpg" alt="Comments" /><hr></div>
-				</div>
-				
-				<div class="row">
-					
-					<div class="col-md-2"><button id="togglecomment" class="btn btn-success">Add a Comment</button></div>				
-					
-					<div class="col-md-8" id="addcomment">
-						<form id="commentform" asp-page-handler="AddComment" method="post" asp-route-id="@Model.myReport.Id" asp-route-createdBy="@Model.myReport.CreatedBy">									
-				      		<span asp-validation-for="myComment.CommentText" class="text-danger"></span> 							     
-						<input asp-for="myComment.CommentText" class="form-control" placeholder="Type your comment ... ">
-						</form>						
-					</div>
+            </div>
 
-					<div class="col-md-2" id="addcommentsubmit">
-						 <div class="text-center"><button type="Submit" value="Submit" form="commentform" style="width:50%" class="btn btn-primary">Submit</button></div>
-					</div>
-				</div>
-				
-				<hr>
-					
-				<div class="row">
-					<div class="col-md-2"><form asp-page-handler="ViewComments" method="post" asp-route-id="@Model.myReport.Id"><button class="btn btn-success">View Comments</button></form></div>		
+            if (Model.errorRMessage == null)
+            {
+                if (Model.myReport != null)
+                {
+                    <div class="row">
+                        <div class="col-md-2"><img src="images/@(Model.myReport.Category).jpg" alt="Sample Photo" /></div>
+                        <div class="col-md-8">
+                            <h2> @Model.myReport.Title </h2>
+                            <P class="newsreport">@Model.myReport.Content</P>
+                            <div class="row">
+                                <div class="newsreport col-sm  newsdate">Created:  @Model.myReport.CreatedDate </div>
+                                <div class="newsreport col-sm  newsdate">Updated: @Model.myReport.PublishedDate </div>
+                                @if (@Model.myReport.IsPublished)
+                                {
+                                    <div class="newsreport col-sm  newsdate">Published: @Model.myReport.PublishedDate </div>
+                                }
+                                else
+                                {
+                                    <div class="newsreport col-sm  newsdate">[Not Published]</div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            @if (@Model.myReport.CreatedBy.ToString() == @UserManager.GetUserId(User).ToString())
+                            {
+                                <div class="row topspaced text-center"><a asp-page="/Reports/Edit" asp-route-id="@Model.myReport.Id" class="btn btnstyle btn-edit centerbutton">Update</a></div>
+                                <div class="row topspaced text-center"><form asp-page-handler="delete" method="post" asp-route-id="@Model.myReport.Id"><button class="btn btnstyle btn-delete centerbutton">Delete</button></form></div>
 
-					<div class="col-md-10">
-					
-				
-						<form method="post">
-							<select class="col-form-control" asp-for="@Model.viewAll">
-							 <option value="true">View All</option>
-							 <option value="false">View Mine</option>
-							</select>
-							<select class="col-form-control" asp-for="@Model.viewDesc">
-							 <option value="true">Newest First</option>
-							 <option value="false">Oldest First</option>
-							</select>
-							<input type="hidden" name="createdBy" class-"form-cotrol" value="@UserManager.GetUserId(User)"/>
-							<input type="hidden" name="ID" class-"form-cotrol" value="@Model.myReport.Id"/>
-							<input name="submit" type="submit" value="Filter" class="input-btn"/>
-						 </form>					
-					</div>
-				</div>
+                                @if (!@Model.myReport.IsPublished)
+                                {
+                                    <div class="row topspaced text-center"><form asp-page-handler="publish" method="post" asp-page="/Reports/Edit" asp-route-id="@Model.myReport.Id"><button class="btn btnstyle btn-publish centerbutton">Publish</button></form></div>
+                                }
+                            }
+
+                        </div>
+                    </div>
 
 
-				@foreach (var item in Model.Comments)
-				{
-
-					<div class="row">
-						<div class="col-md-2">@item.CreatedDate</div>		
-						<div class="col-md-8">
-						
-							@if (@item.CreatedBy.ToString() == @UserManager.GetUserId(User).ToString())
-							{
-								<form id="commentform_@(item.Id)" asp-page-handler="PutComment" method="post" asp-route-id="@item.Id" asp-route-reportId="@Model.myReport.Id" asp-route-createdBy="@Model.myReport.CreatedBy">									
-								<span asp-validation-for="myComment.CommentText" class="text-danger"></span> 							     
-								<input asp-for="myComment.CommentText" class="form-control" value="@item.CommentText">
-								</form>						
-							}
-							else
-							{
-								@item.CommentText
-							}
-						</div>
-						<div class="col-md-2" style="display:inline-flex;">
-							@if (@item.CreatedBy.ToString() == @UserManager.GetUserId(User).ToString())
-							{					
-								<button type="Submit" value="Submit" form="commentform_@(item.Id)" class="btn btn-primary">Update</button>								
-								<form asp-page-handler="deleteComment" method="post" asp-route-id="@item.Id" asp-route-reportId="@Model.myReport.Id"><button class="btn btn-secondary">Delete</button></form>
-							}						
-						</div>
-					</div>
-				}
+                }
+            }
 
 
-				
-				<hr />
-			}
-            
-            
-	<a asp-page="/Reports/New" class="w-20 vtn btn-primary m-2"> + Add New Report</a>     
-	
-	
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12" style="background:#E8E8EC;padding:8px;border-radius:10px;margin:20px;"><img src="images/comments3.jpg" alt="Comments" /></div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-2"><img src="images/addcomment.jpg" alt="add comment"></div>
+
+                <div class="col-md-8" id="addcomment">
+                    <form id="commentform" asp-page-handler="AddComment" method="post">
+                        <input asp-for="@Model.newComment.CommentText" class="form-control" placeholder="Type your comment ... ">
+                        @if (@Model.commenterror == null)
+                        {
+                            <span asp-validation-for="newComment.CommentText" class="text-danger"></span>
+                        }
+                        <div class="form-group">
+                            <input type="hidden" asp-for="newComment.CreatedBy" class-"form-cotrol" value="@UserManager.GetUserId(User)" />
+                            <input type="hidden" asp-for="newComment.ReportId" class-"form-cotrol" value="@Model.myReport.Id" />
+                        </div>
+
+                    </form>
+                </div>
+
+                <div class="col-md-2" id="addcommentsubmit">
+                    <div class="text-center"><button type="Submit" value="Submit" form="commentform" class="btn btnstyle btn-post centerbutton">Post</button></div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <div class="col-md-2">
+                    <form asp-page-handler="ViewComments" method="post" asp-route-id="@Model.myReport.Id">
+
+                        @if (!Model.Comments.Any())
+                        {
+                            <input type="image" src="images/viewcomment.jpg" alt="View Comments">
+
+                        }
+                        else
+                        {
+                            <input autofocus type="image" src="images/viewcomment.jpg" alt="View Comments">
+                        }
+                    </form>
+                </div>
+
+                <div class="col-md-10">
+
+
+                    <form method="post" asp-page-handler="Filter">
+                        <select class="col-form-control form-select  myselect" asp-for="@Model.viewAll">
+                            <option value="true">View All</option>
+                            <option value="false">View Mine</option>
+                        </select>
+                        <select class="col-form-control form-select myselect" asp-for="@Model.viewDesc">
+                            <option value="true">Newest First</option>
+                            <option value="false">Oldest First</option>
+                        </select>
+                        <input type="hidden" name="createdBy" class-"form-cotrol" value="@UserManager.GetUserId(User)" />
+                        <input type="hidden" name="ID" class-"form-cotrol" value="@Model.myReport.Id" />
+                        <input name="submit" type="submit" value="Filter" class="btn btn-secondary aligned" />
+                    </form>
+                </div>
+            </div>
+
+            <div class="row"></div>
+
+            @foreach (var item in Model.Comments)
+            {
+
+                @if (@Model.commenterror == @item.Id.ToString())
+                {
+                    <div class="row topspaced">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-10"><p><span id="comment_@(item.Id)" class="text-danger">Your comment must be between 10 and 100 characters</span></p></div>
+                    </div>
+                }
+
+                <div class="row topspaced">
+                    <div class="col-md-2 newsdate  topspaceddate">@item.UpdatedDate</div>
+                    <div class="col-md-7">
+
+                        @if (@item.CreatedBy.ToString() == @UserManager.GetUserId(User).ToString())
+                        {
+                            <form id="commentform_@(item.Id)" asp-page-handler="PutComment" method="post" asp-route-id="@item.Id" asp-route-reportId="@Model.myReport.Id" asp-route-createdBy="@Model.myReport.CreatedBy">
+
+                                <input asp-for="CommentText" class="form-control" value="@item.CommentText">
+                            </form>
+                        }
+                        else
+                        {
+                            @item.CommentText
+                        }
+                    </div>
+                    <div class="col-md-3">
+                        @if (@item.CreatedBy.ToString() == @UserManager.GetUserId(User).ToString())
+                        {
+                            <div class="row style="flex-wrap:nowrap">
+                                <div class="col"><input type="button" form="commentform_@(item.Id)" class="btn btnstyle btn-edit rhsbutton" value="Update"></div>
+                                <div class="col"><form asp-page-handler="deleteComment" method="post" asp-route-id="@item.Id" asp-route-reportId="@Model.myReport.Id"><button class="btn btnstyle btn-delete centerbutton">Delete</button></form></div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+
+
+            <hr />
+        }
+
+</div>
 

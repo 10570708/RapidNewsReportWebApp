@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using RapidNewsReportWebApp.Services;
 using RapidNewsReportWebApp.Models;
 using System.ComponentModel.DataAnnotations;
+using RapidNewsReportWebApp.Common;
 
 
 
@@ -10,57 +11,103 @@ namespace RapidNewsReportWebApp.Pages.Reports
 {
     public class EditModel : PageModel
     {
- 	[TempData]   
- 	public string FormResult { get; set; }
+        [TempData]
+        public string? FormResult { get; set; }
 
         private readonly NewsReportAPIClient _newsReportApiClient;
         private readonly NewsCommentAPIClient _newsCommentApiClient;
 
-        public EditModel(NewsReportAPIClient newsReportApiClient, NewsCommentAPIClient newsCommentApiClient)
+        public EditModel(NewsReportAPIClient newsReportApiClient)
         {
             _newsReportApiClient = newsReportApiClient;
-            _newsCommentApiClient = newsCommentApiClient;
         }
 
 
-        public string responseContent { get; set; }
-
+        // OnGet handler for Edit Page
+        // Loads the Report to be Edited in the Edit Page
         public async Task<IActionResult> OnGetAsync(int ID)
         {
-
-            myReport = await _newsReportApiClient.GetReport(ID);
-            reportId = ID;
-            return Page();
-
+            try
+            {
+                myReport = await _newsReportApiClient.GetReport(ID);
+                reportId = ID;
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                FormResult = ReportErrorHandler.GetErrorMessages(ex.Message);
+                return RedirectToPage("../Index");
+            }
         }
 
+
+        // OnPost handler for Edit Page
+        // Calls Report API to save the updated Report
         public async Task<IActionResult> OnPost()
         {
-            reportId = myReport.Id;
-            try 
+            if (!ModelState.IsValid)
             {
-	            bool success = await _newsReportApiClient.PutReport(myReport);
-		    if (!success)
-		    {
-			return Page();
-		    }
-		    else
-		    {
-            		FormResult = "Your new Report has been updated successfully.";
-			return RedirectToPage("Index", new { ID = myReport.Id });
-		    }
-	    }
-	    catch (Exception e)
-	    {
-            	FormResult = "There was an error writing your report.";	    	
-		return Page();                
-	    }
+                errorRMessage = "There were errors with the News Report Details you entered.";
+                return Page();
+            }
+            else
+            {
+                reportId = myReport.Id;
+                try
+                {
+                    bool success = await _newsReportApiClient.PutReport(myReport);
+                    if (!success)
+                    {
+                        errorRMessage = "There was an error updating your News Report. ";
+                        return Page();
+                    }
+                    else
+                    {
+                        FormResult = "Your News Report has been updated successfully.";
+                        return RedirectToPage("Index", new { ID = myReport.Id });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    errorRMessage = "There was an error updating your News Report. " + ReportErrorHandler.GetErrorMessages(ex.Message);
+                    return Page();
+                }
+
+            }
+
         }
 
-	public string tester {get; set; }
+
+        // OnPostPublish handler for Edit Page
+        // Calls Report API to updated the IsPublished value for the Report
+
+        public async Task<IActionResult> OnPostPublish(int ID)
+        {
+            try
+            {
+                bool success = await _newsReportApiClient.PublishReport(ID);
+                if (!success)
+                {
+                    FormResult = "There was an error publishing your report.";
+                }
+                else
+                {
+                    FormResult = "Your News Report has been published successfully.";
+                }
+            }
+            catch (Exception ex)
+            {
+                FormResult = "There was an error publishing your News Report. " + ReportErrorHandler.GetErrorMessages(ex.Message); 
+            }
+
+            return RedirectToPage("Index", new { ID = ID });
+
+        }
+
+
         public int reportId { get; set; }
-        
-        //public Report myReport { get; set; }
+
+        public string errorRMessage { get; set; } = "";
 
         [BindProperty]
         public Report myReport { get; set; }
@@ -78,9 +125,6 @@ namespace RapidNewsReportWebApp.Pages.Reports
             [Display(Name = "Food & Drink")]
             FoodDrink = 8
         }
-
-
-
     }
 
 

@@ -4,15 +4,16 @@ using RapidNewsReportWebApp.Models;
 using RapidNewsReportWebApp.Services;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using RapidNewsReportWebApp.Common;
 
 namespace RapidNewsReportWebApp.Pages.Reports
 {
     public class NewModel : PageModel
     {
- 	[TempData]   
- 	public string FormResult { get; set; }
+        [TempData]
+        public string? FormResult { get; set; }
 
-   	
+
 
         private readonly NewsReportAPIClient _newsReportApiClient;
 
@@ -28,23 +29,39 @@ namespace RapidNewsReportWebApp.Pages.Reports
 
         public async Task<IActionResult> OnPost(Report newReport)
         {
-            bool success = await _newsReportApiClient.PostReport(newReport);
-
-            if (!success)
+            if (!ModelState.IsValid)
             {
+                errorRMessage = "There were errors with the Report Details you entered.";
                 return Page();
             }
             else
             {
-            	FormResult = "Your new Report has been created successfully.";
-                return RedirectToPage("../Index");
-            }
+                try
+                {
+                    bool success = await _newsReportApiClient.PostReport(newReport);
 
+                    if (!success)
+                    {
+                        return Page();
+                    }
+                    else
+                    {
+                        FormResult = "Your new Report has been created successfully.";
+                        return RedirectToPage("../Index");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    errorRMessage = ReportErrorHandler.GetErrorMessages(ex.Message);
+                    return Page();
+                }
+            }
         }
+
+        public string errorRMessage { get; set; } = "";
 
         [BindProperty]
         public Report newReport { get; set; }
-        
         public enum CategoryType
         {
             [Display(Name = "Local News")]

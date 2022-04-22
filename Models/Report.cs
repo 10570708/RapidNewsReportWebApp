@@ -5,17 +5,17 @@ namespace RapidNewsReportWebApp.Models
 {
     public class Report
     {
-        public int Id { get; set; }
+        public int Id { get; set; } = 0;
 
         [   Required(ErrorMessage="Your News Report Title must be between 10 and 100 characters."), 
-            MinLength(10, ErrorMessage = "Your News Report Title must be between 10 and 100 characters."), 
-            MaxLength(100, ErrorMessage = "Your News Report Title must be between 10 and 100 characters.")
+            MinLength(10, ErrorMessage = "Your News Report Title must be between 10 and 150 characters."), 
+            MaxLength(150, ErrorMessage = "Your News Report Title must be between 10 and 150 characters.")
         ] 
         public string Title { get; set; } = "";
 
-        [   Required(ErrorMessage="Your News Report cannot be empty."), 
-            MinLength(50, ErrorMessage = "Your News Report Title must be between 50 and 5000 characters."), 
-            MaxLength(1000,ErrorMessage = "Your News Report Title must be between 50 and 5000 characters.")
+        [   Required(ErrorMessage= "Your News Report must be between 50 and 5000 characters."), 
+            MinLength(50, ErrorMessage = "Your News Report must be between 50 and 5000 characters."), 
+            MaxLength(5000,ErrorMessage = "Your News Report must be between 50 and 5000 characters.")
         ]
         public string Content { get; set; } = "";
 
@@ -34,7 +34,7 @@ namespace RapidNewsReportWebApp.Models
         public CategoryType Category { get; set; }
 
         [Required]
-        public Guid CreatedBy { get; set; }
+        public Guid CreatedBy { get; set; } = new Guid();
     }
 
 

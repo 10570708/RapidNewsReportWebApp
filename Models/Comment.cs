@@ -6,7 +6,9 @@ namespace RapidNewsReportWebApp.Models
     public class Comment
     {
         public int Id { get; set; }
+        
         public int ReportId { get; set; }
+        
         public Guid CreatedBy { get; set; }
         
         [   Required(ErrorMessage="Your Comment must be between 10 and 100 characters."), 
@@ -17,6 +19,7 @@ namespace RapidNewsReportWebApp.Models
 
         [DataType(DataType.DateTime)]
         public DateTime CreatedDate { get; set; }
+        
         [DataType(DataType.DateTime)]
         public DateTime UpdatedDate { get; set; }
 
