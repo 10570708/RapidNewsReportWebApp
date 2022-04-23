@@ -1,7 +1,7 @@
 # RapidNewsReportWebApp: The Web UI functionality
 
 ### Once the setup and configuration steps have been followed, the application can be run in Visual Studio. The following functionality is available.
-### The application will open in a browser window ( as per [configuration settngs](config.md) )
+### The application will open in a browser window ( as per [configuration settings](config.md) )
 
 ![Home](images/AppHome.jpg)
 
@@ -22,15 +22,22 @@
 
 ![Home Page](images/HomePage.jpg)
 
+
+
+
 **2. Add News Report**
 - Add a News Report and choose to Publish now or not 
 
 ![Add News Report](images/AddNews.jpg)
 
+
+
 **3. Update News Report**
 - Update the News Report details 
 
 ![Update News Report](images/UpdateNews.jpg)
+
+
 
 **4. View News Report**
 - Display News Report
