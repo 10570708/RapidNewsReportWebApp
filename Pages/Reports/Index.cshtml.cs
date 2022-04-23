@@ -4,9 +4,11 @@ using RapidNewsReportWebApp.Services;
 using RapidNewsReportWebApp.Models;
 using System.ComponentModel.DataAnnotations;
 using RapidNewsReportWebApp.Common;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RapidNewsReportWebApp.Pages.Reports
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
 
@@ -42,17 +44,25 @@ namespace RapidNewsReportWebApp.Pages.Reports
                 }
                 catch (Exception ex)
                 {
+                    myReport = await _newsReportApiClient.GetReport(newComment.ReportId);
                     errorCMessage = "WARNING: " + ReportErrorHandler.GetErrorMessages(ex.Message, false);
-                    return RedirectToPage("Index", new { Id = newComment.ReportId, view = false });
+                    return Page();
 
                 }
             }
             else
             {
-                errorRMessage  = "Your comment has not been added ... ";
+                try
+                {
+                    errorCMessage = "Your comment has not been added";
 
-                myReport = await _newsReportApiClient.GetReport(newComment.ReportId);
-                Comments = await _newsCommentApiClient.GetComments(newComment.ReportId);
+                    myReport = await _newsReportApiClient.GetReport(newComment.ReportId);
+                    Comments = await _newsCommentApiClient.GetComments(newComment.ReportId);
+                }
+                catch (Exception e)
+                {
+                    errorCMessage = ReportErrorHandler.GetErrorMessages(e.Message);
+                }
 
                 return Page();
             }
@@ -72,19 +82,36 @@ namespace RapidNewsReportWebApp.Pages.Reports
 
             if (CommentText.Length > 0)
             {
-                bool success = await _newsCommentApiClient.PutComment(updated);
-                progressMessage = "Your comment has been updated";
+                try
+                {
+                    bool success = await _newsCommentApiClient.PutComment(updated);
+                    progressMessage = "Your comment has been updated";
 
-                return RedirectToPage("Index", new { Id = reportId, view = true });
+                    return RedirectToPage("Index", new { Id = reportId, view = true });
+                }
+                catch (Exception ex)
+                {
+                    myReport = await _newsReportApiClient.GetReport(newComment.ReportId);
+                    errorCMessage = "WARNING: " + ReportErrorHandler.GetErrorMessages(ex.Message, false);
+                    return Page();
+                }
             }
             else
             {
-                myReport = await _newsReportApiClient.GetReport(reportId);
-                Comments = await _newsCommentApiClient.GetComments(reportId);
+                try
+                {
+                    myReport = await _newsReportApiClient.GetReport(reportId);
+                    Comments = await _newsCommentApiClient.GetComments(reportId);
 
-                commenterror = $"{id}";
-                progressMessage = "Your comment has not been updated BUT report id is " + updated.ReportId + " and id is " + updated.Id + " and comment is " + CommentText;
-                return Page();
+                    commenterror = $"{id}";
+                    errorCMessage = "Your comment has not been updated ...";
+                    return Page();
+                }
+                catch (Exception e)
+                {
+                    errorCMessage = ReportErrorHandler.GetErrorMessages(e.Message);
+                    return Page();
+                }
             }
 
         }
@@ -92,8 +119,15 @@ namespace RapidNewsReportWebApp.Pages.Reports
 
         public async Task<IActionResult> OnPostViewComments(int id)
         {
-            Comments = await _newsCommentApiClient.GetComments(id);
-            myReport = await _newsReportApiClient.GetReport(id);
+            try
+            {
+                Comments = await _newsCommentApiClient.GetComments(id);
+                myReport = await _newsReportApiClient.GetReport(id);
+            }
+            catch (Exception ex)
+            {
+                errorCMessage = ReportErrorHandler.GetErrorMessages(ex.Message);
+            }
             return Page();
         }
 
@@ -170,20 +204,37 @@ namespace RapidNewsReportWebApp.Pages.Reports
 
         public async Task<IActionResult> OnPostDeleteComment(int id, int reportId)
         {
-            bool success = await _newsCommentApiClient.DeleteComment(id);
+            bool success = false;
+
+            try
+            {
+                success = await _newsCommentApiClient.DeleteComment(id);
+            }
+            catch (Exception e)
+            {
+                errorCMessage = ReportErrorHandler.GetErrorMessages(e.Message, false);
+                return Page();
+            }
 
             if (!success)
             {
-                return Page();
+                errorCMessage = "Your comment has not beed deleted.";
             }
             else
             {
                 FormResult = "Your Comment has been successfully deleted.";
+            }
+
+            try
+            {
                 myReport = await _newsReportApiClient.GetReport(reportId);
                 Comments = await _newsCommentApiClient.GetComments(reportId);
-                progressMessage = "Your Comment has been successfully deleted.";
-                return Page();
             }
+            catch (Exception e)
+            {
+                errorCMessage += ReportErrorHandler.GetErrorMessages(e.Message);
+            }
+            return Page();
 
         }
 
@@ -235,6 +286,9 @@ namespace RapidNewsReportWebApp.Pages.Reports
             return Page();
         }
 
+
+
+
         [BindProperty]
         public string? commenterror { get; set; }
 
@@ -269,8 +323,8 @@ namespace RapidNewsReportWebApp.Pages.Reports
 
         public string? progressMessage { get; set; }
 
-        public string errorCMessage { get; set; } = "";
-                
+        public string errorCMessage { get; set; }
+
         [BindProperty]
         public IEnumerable<Comment> Comments { get; set; } = Enumerable.Empty<Comment>();
 

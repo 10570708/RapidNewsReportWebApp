@@ -4,11 +4,11 @@ using RapidNewsReportWebApp.Services;
 using RapidNewsReportWebApp.Models;
 using System.ComponentModel.DataAnnotations;
 using RapidNewsReportWebApp.Common;
-
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace RapidNewsReportWebApp.Pages.Reports
 {
+    [Authorize]
     public class EditModel : PageModel
     {
         [TempData]

@@ -1,4 +1,5 @@
 ﻿@page
+[Authorize]
 @model RapidNewsReportWebApp.Pages.Reports.IndexModel
 @using RapidNewsReportWebApp.Models
 @inject SignInManager<IdentityUser> SignInManager
@@ -35,6 +36,12 @@
                 <div class="alert alert-warning" role="alert">@Model.errorRMessage</div>
             }
 
+            if (Model.errorCMessage != null)
+            {
+                <div class="alert alert-warning" role="alert">@Model.errorCMessage</div>
+            }
+
+
             <div id="logobar" align="center">
 
                 <img src="images/WorldNews.jpg" alt="Sample Photo" />
@@ -51,45 +58,42 @@
 
             </div>
 
-            if (Model.errorRMessage == null)
+            if (Model.myReport != null)
             {
-                if (Model.myReport != null)
-                {
-                    <div class="row">
-                        <div class="col-md-2"><img src="images/@(Model.myReport.Category).jpg" alt="Sample Photo" /></div>
-                        <div class="col-md-8">
-                            <h2> @Model.myReport.Title </h2>
-                            <P class="newsreport">@Model.myReport.Content</P>
-                            <div class="row">
-                                <div class="newsreport col-sm  newsdate">Created:  @Model.myReport.CreatedDate </div>
-                                <div class="newsreport col-sm  newsdate">Updated: @Model.myReport.PublishedDate </div>
-                                @if (@Model.myReport.IsPublished)
-                                {
-                                    <div class="newsreport col-sm  newsdate">Published: @Model.myReport.PublishedDate </div>
-                                }
-                                else
-                                {
-                                    <div class="newsreport col-sm  newsdate">[Not Published]</div>
-                                }
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            @if (@Model.myReport.CreatedBy.ToString() == @UserManager.GetUserId(User).ToString())
+                <div class="row">
+                    <div class="col-md-2"><img src="images/@(Model.myReport.Category).jpg" alt="Sample Photo" /></div>
+                    <div class="col-md-8">
+                        <h2> @Model.myReport.Title </h2>
+                        <P class="newsreport">@Model.myReport.Content</P>
+                        <div class="row">
+                            <div class="newsreport col-sm  newsdate">Created:  @Model.myReport.CreatedDate </div>
+                            <div class="newsreport col-sm  newsdate">Updated: @Model.myReport.PublishedDate </div>
+                            @if (@Model.myReport.IsPublished)
                             {
-                                <div class="row topspaced text-center"><a asp-page="/Reports/Edit" asp-route-id="@Model.myReport.Id" class="btn btnstyle btn-edit centerbutton">Update</a></div>
-                                <div class="row topspaced text-center"><form asp-page-handler="delete" method="post" asp-route-id="@Model.myReport.Id"><button class="btn btnstyle btn-delete centerbutton">Delete</button></form></div>
-
-                                @if (!@Model.myReport.IsPublished)
-                                {
-                                    <div class="row topspaced text-center"><form asp-page-handler="publish" method="post" asp-page="/Reports/Edit" asp-route-id="@Model.myReport.Id"><button class="btn btnstyle btn-publish centerbutton">Publish</button></form></div>
-                                }
+                                <div class="newsreport col-sm  newsdate">Published: @Model.myReport.PublishedDate </div>
                             }
-
+                            else
+                            {
+                                <div class="newsreport col-sm  newsdate">[Not Published]</div>
+                            }
                         </div>
                     </div>
+                    <div class="col-md-2">
+                        @if (@Model.myReport.CreatedBy.ToString() == @UserManager.GetUserId(User).ToString())
+                        {
+                            <div class="row topspaced text-center"><a asp-page="/Reports/Edit" asp-route-id="@Model.myReport.Id" class="btn btnstyle btn-edit centerbutton">Update</a></div>
+                            <div class="row topspaced text-center"><form asp-page-handler="delete" method="post" asp-route-id="@Model.myReport.Id"><button class="btn btnstyle btn-delete centerbutton">Delete</button></form></div>
+
+                            @if (!@Model.myReport.IsPublished)
+                            {
+                                <div class="row topspaced text-center"><form asp-page-handler="publish" method="post" asp-page="/Reports/Edit" asp-route-id="@Model.myReport.Id"><button class="btn btnstyle btn-publish centerbutton">Publish</button></form></div>
+                            }
+                        }
+
+                    </div>
+                </div>
 
 
-                }
             }
 
 
@@ -101,9 +105,7 @@
 
             <div class="row">
 
-                <div class="col-md-2"><img src="images/addcomment.jpg" alt="add comment"></div>
-
-                <div class="col-md-8" id="addcomment">
+                <div class="col-md-10" id="addcomment">
                     <form id="commentform" asp-page-handler="AddComment" method="post">
                         <input asp-for="@Model.newComment.CommentText" class="form-control" placeholder="Type your comment ... ">
                         @if (@Model.commenterror == null)
@@ -111,8 +113,8 @@
                             <span asp-validation-for="newComment.CommentText" class="text-danger"></span>
                         }
                         <div class="form-group">
-                            <input type="hidden" asp-for="newComment.CreatedBy" class-"form-cotrol" value="@UserManager.GetUserId(User)" />
-                            <input type="hidden" asp-for="newComment.ReportId" class-"form-cotrol" value="@Model.myReport.Id" />
+                            <input type="hidden" asp-for="@Model.newComment.CreatedBy" class-"form-cotrol" value="@UserManager.GetUserId(User)" />
+                            <input type="hidden" asp-for="@Model.newComment.ReportId" class-"form-cotrol" value="@Model.myReport.Id" />
                         </div>
 
                     </form>
@@ -131,12 +133,12 @@
 
                         @if (!Model.Comments.Any())
                         {
-                            <input type="image" src="images/viewcomment.jpg" alt="View Comments">
+                            <button type="submit" class="btn btnstylewide btn-post centerbutton">Load Comments</button> 
 
                         }
                         else
                         {
-                            <input autofocus type="image" src="images/viewcomment.jpg" alt="View Comments">
+                            <button autofocus type="button" class="btn btnstylewide btn-post centerbutton">Load Comments</button>
                         }
                     </form>
                 </div>
@@ -192,8 +194,8 @@
                     <div class="col-md-3">
                         @if (@item.CreatedBy.ToString() == @UserManager.GetUserId(User).ToString())
                         {
-                            <div class="row style="flex-wrap:nowrap">
-                                <div class="col"><input type="button" form="commentform_@(item.Id)" class="btn btnstyle btn-edit rhsbutton" value="Update"></div>
+                            <div class="row" style="flex-wrap:nowrap">
+                                <div class="col"><button type="submit" form="commentform_@(item.Id)" class="btn btnstyle btn-edit rhsbutton">Update</button></div>
                                 <div class="col"><form asp-page-handler="deleteComment" method="post" asp-route-id="@item.Id" asp-route-reportId="@Model.myReport.Id"><button class="btn btnstyle btn-delete centerbutton">Delete</button></form></div>
                             </div>
                         }

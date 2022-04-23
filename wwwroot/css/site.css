@@ -1,125 +1,139 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }
 
 .my-search {
-    width:250px;
-    background:red;
+    width: 250px;
+    background: red;
     display: inline;
 }
+
 select, input, submit {
     display: inline-block;
 }
-input[type="text"] {
-    display: inline-block;
-    float: none;
-}
+
+    input[type="text"] {
+        display: inline-block;
+        float: none;
+    }
+
 h1 {
-color: gray;
-font-family: Verdana, sans-serif;
-font-style: italic;
+    color: gray;
+    font-family: Verdana, sans-serif;
+    font-style: italic;
 }
 
 h2 {
-color: gray;
-font-family: Verdana, sans-serif;
+    color: gray;
+    font-family: Verdana, sans-serif;
 }
 
 .newsreport {
-color: gray;
-font-family: Verdana, sans-serif;
+    color: gray;
+    font-family: Verdana, sans-serif;
 }
 
 .newsdate {
-color: gray;
-font-family: Verdana, sans-serif;
-font-style:italic;
-font-size:12px;
+    color: gray;
+    font-family: Verdana, sans-serif;
+    font-style: italic;
+    font-size: 12px;
 }
 
-.myselect
-{
-   width : fit-content;
-   display: inline;
+.myselect {
+    width: fit-content;
+    display: inline;
 }
 
-.topspaceddate{
- margin: auto;
- }
- 
- .btn-edit{
- background: #639067;
- }
- 
- .btn-delete{
-  background: #7d3030;
-  }
- 
- .btn-post{
-  background: #1f76a1;
-  }
-
-.btn-publish{
-  background: #c6c6d0;
-  }
-
- .btnstyle2{
-  color: white;
- }
-
-.btnstyle2:hover {
- font-weight: bold;
-  color: white;
+.topspaceddate {
+    margin: auto;
 }
 
- 
- .btnstyle{
- color: white;
- width:100px;
- }
-
-.btnstyle:hover {
- font-weight: bold;
-  color: white;
+.btn-edit {
+    background: #639067;
 }
+
+.btn-delete {
+    background: #7d3030;
+}
+
+.btn-post {
+    background: #1f76a1;
+}
+
+.btn-publish {
+    background: #c6c6d0;
+}
+
+.btnstyle2 {
+    color: white;
+}
+
+    .btnstyle2:hover {
+        font-weight: bold;
+        color: white;
+    }
+
+.btnstylewide {
+    color: white;
+    width: 200px;
+}
+
+    .btnstylewide:hover {
+        color: white;
+        font-weight: bold;
+    }
+
+
+.btnstyle {
+    color: white;
+    width: 100px;
+}
+
+    .btnstyle:hover {
+        font-weight: bold;
+        color: white;
+    }
 
 .topspaced {
-padding-top:10px;
+    padding-top: 10px;
 }
-.aligned
-{
-  vertical-align:baseline;
+
+.aligned {
+    vertical-align: baseline;
 }
+
 img {
- max-width: 100%; 
- max-height: 100%; 
+    max-width: 100%;
+    max-height: 100%;
 }
 
 @media only screen and (max-width: 768px) {
-   #logobar { display: none; }	
-  }
-  
-.centerbutton {
-margin-left: auto;
-margin-right:auto;
+    #logobar {
+        display: none;
+    }
 }
 
-.rhsbutton{
-float:right;
+.centerbutton {
+    margin-left: auto;
+    margin-right: auto;
 }
-  
+
+.rhsbutton {
+    float: right;
+}

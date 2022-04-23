@@ -5,9 +5,11 @@ using RapidNewsReportWebApp.Services;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using RapidNewsReportWebApp.Common;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RapidNewsReportWebApp.Pages.Reports
 {
+    [Authorize]
     public class NewModel : PageModel
     {
         [TempData]
