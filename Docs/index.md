@@ -1,7 +1,7 @@
 # RapidNewsReportWebApp: Documentation
 
 # Requirements
-- .net version 6.0.202
+- .NET version 6.0.202
 - Visual Studio 2022
 
 
