@@ -18,7 +18,7 @@ Clone the files locally using either
 ![Git Clone](images/gitclone.jpg)
 
 
-##**or**
+*or*
 
 ### Directly in Visual Studio 2022 
 - Open Project
@@ -37,10 +37,24 @@ Clone the files locally using either
 
 - Load the solution
 - Make sure in the Package Manager Console that it is set as the 'Default Project'
-- In the Package Manager Console run the command 
+- In the Package Manager Console run the commands: 
+    *(wait for the build to complete after each command)*
+ 
+1.    `Add-Migration InitialCreate`
 
-    `Update-Database`
+    Output:  
+    
+    `Build started...` 
 
+    `Build succeeded`
+
+2.    `Update-Database`
+
+   Output:  
+    
+    `Build started...` 
+
+    `Build succeeded`
 
 
 **The package dependencies shuld be managed automatically, but if not, use NuGet Package Manager to install them. The list of required NuGet Packages is: **

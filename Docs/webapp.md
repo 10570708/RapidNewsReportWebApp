@@ -1,7 +1,14 @@
 # RapidNewsReportWebApp: The Web UI functionality
 
-### Once the setup and configuration steps have been followed, the application can be run in Visual Studio. The following functionality is available.
+## Once the setup and configuration steps have been followed, the application can be run in Visual Studio. The following functionality is available.
 ### The application will open in a browser window ( as per [configuration settings](config.md) )
+
+*To use the application, 
+- register to create an account
+- verify the account
+- login
+
+*The Report and Comment APIs are seeded with News Reports and Comments*
 
 ![Home](images/AppHome.jpg)
 
